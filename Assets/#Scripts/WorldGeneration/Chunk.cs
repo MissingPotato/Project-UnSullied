@@ -51,23 +51,24 @@ public class Chunk : MonoBehaviour
 			
 			randomChance = Random.Range(0, 100); // Randomize the random Chance
 
-			if ( randomChance < 25 )
+			if ( randomChance < 25 ) // Spawn World Resources
 			{
 				randomIndex = Random.Range(0, worldResources.Count); // Randomize the random index
 				GameObject worldSpawn = Instantiate(worldResources[randomIndex], spawnPoints[i]);
 
 				worldSpawn.transform.rotation = Quaternion.Euler(new Vector3(worldSpawn.transform.rotation.x, worldSpawn.transform.rotation.y + Random.Range(0f, 180f), worldSpawn.transform.rotation.z));
+				worldSpawn.transform.position += new Vector3 (Random.Range(0f, .5f), 0, Random.Range(0f, .5f) );
 
 			}
 			
-			else if ( randomChance >= 25 && randomChance < 95 )
+			else if ( randomChance >= 25 && randomChance < 95 ) // Spawn World Decoration Assets
 
 			{	
 				randomIndex = Random.Range(0, worldStatic.Count); // Randomize the random index
 				GameObject worldSpawn = Instantiate(worldStatic[randomIndex], spawnPoints[i]);
 
 				worldSpawn.transform.rotation = Quaternion.Euler(new Vector3(worldSpawn.transform.rotation.x, worldSpawn.transform.rotation.y + Random.Range(0f, 180f), worldSpawn.transform.rotation.z));
-				worldSpawn.transform.position += new Vector3 (Random.Range(0f, .5f), Random.Range(0f, .5f), Random.Range(0f, .5f) );
+				worldSpawn.transform.position += new Vector3 (Random.Range(0f, 1.5f), 0, Random.Range(0f, 1.5f) );
 
 
 			}
