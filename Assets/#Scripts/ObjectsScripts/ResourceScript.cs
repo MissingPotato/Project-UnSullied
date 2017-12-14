@@ -8,6 +8,8 @@ public class ResourceScript : MonoBehaviour
 	
 	public string resourceName = "Unnamed Resource";
 
+	public Item resourceType;
+
 	public int resourceAmount = 0;
 
 	#endregion
