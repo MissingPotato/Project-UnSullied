@@ -23,9 +23,10 @@ public class ResourceScript : MonoBehaviour
 		}
 		else if ( resourceAmount < _amount ) // If we are trying to take away more than we have, then we give the diference then kill the resource;
 		{
-
+			int returnResource = _amount - resourceAmount;
+			resourceAmount = 0;
 			CheckForDeath();
-			return _amount - resourceAmount;
+			return returnResource;
 		}
 
 		return 0;
