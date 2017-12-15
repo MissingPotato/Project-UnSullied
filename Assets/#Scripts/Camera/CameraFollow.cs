@@ -52,15 +52,7 @@ public class CameraFollow : MonoBehaviour {
 				}
 			}
 				
-			if(-offSet.z < constrainZ && -offSet.z > 1)
-			{
-				offSet.z += Input.GetAxis("Mouse ScrollWheel") * 3;
-				if (Input.GetKey(KeyCode.LeftShift))
-				{
-					offSet.z += Input.GetAxis("Mouse ScrollWheel") * 3;
-				}
-
-			}
+			
 				
 
 			if (offSet.y > constrainY)
@@ -71,10 +63,10 @@ public class CameraFollow : MonoBehaviour {
 
 
 			if (-offSet.z > constrainZ)
-				offSet.z = -constrainZ;
+				offSet.z = -constrainZ + .1f;
 
 			if (-offSet.z < 2)
-				offSet.z = -2f;
+				offSet.z = -2.1f;
 		} // Scrolling
 
 		Vector3 desiredPosition = target.position + offSet;

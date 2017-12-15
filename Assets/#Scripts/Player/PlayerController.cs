@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour 
 {
+
+//  --------Variables-------------------------------------------------------------------------------
+
 	#region Variables
 	
 	public float playerBaseSpeed = 2.5f;
 	public PlayerStats playerStats;
 	private Rigidbody playerRb;
-
+	private Vector3 mousePos;
+	Ray camRay;
+	RaycastHit floorHit;
+	Vector3 playerToMouse;
 
 	[Space]
 	[Space]
@@ -21,23 +27,21 @@ public class PlayerController : MonoBehaviour
 
 	#endregion
 
+//  --------Active Functions-------------------------------------------------------------------------------
+
 	void Awake () 
 	{
 		playerStats.playerName = GenerateUsername(); // Generate a name for the user.
-		for (int i = 0; i < 50; i++)
-		{
-			Debug.Log(GenerateUsername());
-		}
 		playerRb = GetComponent<Rigidbody>();
 	}
 	
-
 	void FixedUpdate () 
 	{
 		PlayerMotor();
-		
-
+		LookAtMouse();
 	}
+
+//  --------Sleeper Functions-------------------------------------------------------------------------------
 
 	/// <summary>
 	/// Generates a username out of the prefixes and the randomNames
@@ -63,5 +67,20 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	public void LookAtMouse()
+	{
+		camRay = Camera.main.ScreenPointToRay ( Input.mousePosition ) ;
+
+		if ( Physics.Raycast ( camRay, out floorHit ))
+		{
+
+			playerToMouse = floorHit.point - transform.position;
+			playerToMouse.y = 0;
+
+			Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+			playerRb.MoveRotation ( newRotation ) ;
+
+		}
+	}
 
 }

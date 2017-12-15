@@ -136,6 +136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7b03ce96667e7f4ba18c920856223be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceName: Unnamed Resource
+  resourceName: Wood
   resourceType: {fileID: 11400000, guid: 1d635dcaa144a0341b708f96ced7c077, type: 2}
   resourceAmount: 512
