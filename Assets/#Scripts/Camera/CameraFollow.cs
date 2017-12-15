@@ -13,12 +13,12 @@ public class CameraFollow : MonoBehaviour {
 
 	public int constrainZ = 17;
 
-	public int constrainY = 20;
+	public int constrainY = 15;
 
 	[Space]
 
 	[Range(0f, 10f)]
-	public float smoothSpeed = 0.125f;
+	public float smoothSpeed = 7f;
 	
 	[Space]
 
@@ -43,7 +43,7 @@ public class CameraFollow : MonoBehaviour {
 
 		if(Input.GetAxis("Mouse ScrollWheel") != 0)
 		{
-			if (offSet.y < constrainY && offSet.y > 4)
+			if (offSet.y < constrainY && offSet.y > 3.5f)
 			{
 				offSet.y += Input.GetAxis("Mouse ScrollWheel") * -3;
 				if (Input.GetKey(KeyCode.LeftShift))
@@ -64,17 +64,17 @@ public class CameraFollow : MonoBehaviour {
 				
 
 			if (offSet.y > constrainY)
-				offSet.y = 19.9f;
+				offSet.y = constrainY - 0.1f;
 
-			if (offSet.y < 4)
-				offSet.y = 4.01f;
+			if (offSet.y < 3.5f)
+				offSet.y = 3.51f;
 
 
 			if (-offSet.z > constrainZ)
-				offSet.z = -16.9f;
+				offSet.z = -constrainZ;
 
-			if (-offSet.z < 1)
-				offSet.z = -1.01f;
+			if (-offSet.z < 2)
+				offSet.z = -2f;
 		} // Scrolling
 
 		Vector3 desiredPosition = target.position + offSet;
