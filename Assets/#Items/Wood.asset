@@ -11,12 +11,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb634dcc6c24c834b85cc2aa3a9ac0aa, type: 3}
   m_Name: Wood
   m_EditorClassIdentifier: 
-  itemName: Unconfigured Item
+  itemName: Wood
   itemSprite: {fileID: 0}
   itemObject: {fileID: 0}
-  Description: 
-  StackSize: 0
-  StackAble: 0
+  Description: Smells like pine
+  StackSize: 64
+  StackAble: 1
   itemAtributes: []
   Wearable: 0
   useable: 0
