@@ -14,6 +14,11 @@ public class ResourceScript : MonoBehaviour
 
 	#endregion
 
+    /// <summary>
+    /// Substracts _amount from the resource's resourceAmount
+    /// </summary>
+    /// <param name="_amount">The amount to gather</param>
+    /// <returns>The gathered amount</returns>
 	public int Gather(int _amount)
 	{
 		
@@ -33,11 +38,10 @@ public class ResourceScript : MonoBehaviour
 		return 0;
 	}
 
-
     /// <summary>
     /// This function is going to destroy the resource node if it is depleated, run this at the end of any kind of function.
     /// </summary>
-	public void CheckForDeath()
+	public bool CheckForDeath()
 	{
 
 		if (resourceAmount <= 0)
@@ -46,8 +50,31 @@ public class ResourceScript : MonoBehaviour
             // Play destroy animation
 
             Destroy(gameObject, .5f);
+
+            return true; // If the resource has no more avaible resources.
 		}
 
+        else
+        {
+
+            return false; // If the resource is still alive
+
+        }
+
 	}
+
+    /// <summary>
+    /// Adds _amount to the current resourceAmount
+    /// </summary>
+    /// <param name="_amount"></param>
+    public void Grow (int _amount)
+    {
+
+        if (_amount < 0)
+            return;
+
+        resourceAmount += _amount;
+
+    }
 
 }
