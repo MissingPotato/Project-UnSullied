@@ -26,16 +26,27 @@ public class ResourceScript : MonoBehaviour
 		else if ( resourceAmount < _amount ) // If we are trying to take away more than we have, then we give the diference then kill the resource;
 		{
 			int returnResource = _amount - resourceAmount;
-			resourceAmount = 0;
-			CheckForDeath();
-			return returnResource;
+			CheckForDeath(); // Check if the resource is depleated
+			return returnResource; // Return the amount that was salvaged
 		}
 
 		return 0;
 	}
 
+
+    /// <summary>
+    /// This function is going to destroy the resource node if it is depleated, run this at the end of any kind of function.
+    /// </summary>
 	public void CheckForDeath()
 	{
+
+		if (resourceAmount <= 0)
+		{
+
+            // Play destroy animation
+
+            Destroy(gameObject, .5f);
+		}
 
 	}
 

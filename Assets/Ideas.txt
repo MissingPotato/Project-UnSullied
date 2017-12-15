@@ -1,0 +1,4 @@
+Resources get smaller, the less resources amount they have, the samller the node gets. Trees grow over-time and stone/iron/anderemium are destroyed and randomly generate
+every now and then
+
+Grass can be 1 hit and you get seeds, (maybe some weed), also grass randomly regrows, that is if there is no building above it.
