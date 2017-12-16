@@ -103,6 +103,7 @@ public class InventoryCursorInteract : MonoBehaviour
 								currentSlot.transform.Find("ItemAmount").gameObject.SetActive(true);
 							}
 
+
 							underSlot.ParentedInventory.Slot_Transfer(underSlot.ParentedInventory.Slot_FindID(underSlot.gameObject), currentSlot.ParentedInventory.Slot_FindID(currentSlot.gameObject));
 
 						}

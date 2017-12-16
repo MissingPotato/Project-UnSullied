@@ -16,23 +16,24 @@ public class PlayerController : MonoBehaviour
 	Ray camRay;
 	RaycastHit floorHit;
 	Vector3 playerToMouse;
+	Quaternion newRotation;
 
 	[Space]
 	[Space]
 	[Space]
 	[Space]
 
-	public List<string> randomPrefix = new List<string>();
-	public List<string> randomName;
+	public List<string> randomPrefix = new List<string>(); // A list of random prefixes
+	public List<string> randomName; // A list of random names
 
 	#endregion
 
 //  --------Active Functions-------------------------------------------------------------------------------
 
-	void Awake () 
+	void Awake ()
 	{
 		playerStats.playerName = GenerateUsername(); // Generate a name for the user.
-		playerRb = GetComponent<Rigidbody>();
+		playerRb = GetComponent<Rigidbody>(); // Sets the player's rigidbody to playerRb
 	}
 	
 	void FixedUpdate () 
@@ -67,6 +68,9 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Decides the player's look rotation, follows the mouse.
+	/// </summary>
 	public void LookAtMouse()
 	{
 		camRay = Camera.main.ScreenPointToRay ( Input.mousePosition ) ;
@@ -74,13 +78,24 @@ public class PlayerController : MonoBehaviour
 		if ( Physics.Raycast ( camRay, out floorHit ))
 		{
 
+			if (floorHit.collider.gameObject.name != "Plane")
+				return;
+
 			playerToMouse = floorHit.point - transform.position;
 			playerToMouse.y = 0;
 
-			Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+			newRotation = Quaternion.LookRotation(playerToMouse);
 			playerRb.MoveRotation ( newRotation ) ;
 
 		}
+
+		else
+		{
+			newRotation = Quaternion.Euler(Vector3.zero);
+			transform.rotation = transform.rotation;
+
+		}
+
 	}
 
 }
