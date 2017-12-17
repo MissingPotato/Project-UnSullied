@@ -154,6 +154,9 @@ public class InventorySlot : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Clears the slot!
+	/// </summary>
 	public void Slot_Clear()
 	{
 		heldItem = null;
@@ -163,7 +166,35 @@ public class InventorySlot : MonoBehaviour
 		UpdateSlot();
 	}
 
+	/// <summary>
+	/// This will only work if we have a gameobject for the item & we also have a gameObject "player"
+	/// </summary>
+	public bool DropItem()
+	{
 
+		if (ParentedInventory == null)
+			return false;
+
+
+		GameObject droppedItem;
+
+		if (heldItem.itemObject != null)
+			droppedItem = Instantiate(heldItem.itemObject, ParentedInventory.transform.Find("Hand"));
+		else
+			droppedItem = Instantiate(Resources.Load<GameObject>("Items/placeholder"), ParentedInventory.transform.Find("Hand"));
+
+		droppedItem.AddComponent<ItemDroppedScript>();
+		droppedItem.AddComponent<Rigidbody>();
+		droppedItem.GetComponent<Rigidbody>().mass = 50;
+		droppedItem.GetComponent<ItemDroppedScript>().heldItem = heldItem;
+		droppedItem.GetComponent<ItemDroppedScript>().itemAmount = itemAmount;
+		droppedItem.transform.localScale *= 0.75f;
+		droppedItem.transform.parent = ParentedInventory.transform.parent;
+		droppedItem.name = heldItem.itemName;
+
+		Slot_Clear();
+		return true;
+	}
 
 	/// <summary>
 	/// Update the slot's image and amount

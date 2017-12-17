@@ -52,6 +52,14 @@ public class InventoryCursorInteract : MonoBehaviour
 	{
 		#region LeftClickItemMovement
 
+		if (Input.GetButtonDown("InventoryToggle"))
+		{
+
+			dragging = false;
+
+		}
+
+
 		if ( Input.GetMouseButtonDown(0) && !dragging )
 		{
 			underCursor1 = RaycastMouse();
@@ -84,6 +92,21 @@ public class InventoryCursorInteract : MonoBehaviour
 		else if (Input.GetMouseButtonDown(0) && dragging )
 		{
 			underCursor2 = RaycastMouse();
+
+			if ( underCursor2.Count < 2 )
+			{
+				foreach ( RaycastResult rez in underCursor2 )
+				{
+					if ( !rez.gameObject.GetComponent<InventorySlot>() )
+					{
+						if (currentSlot.DropItem())
+							Debug.Log("Succesfully dropped the item!");
+						else
+							Debug.LogWarning("Failed to drop the item!");
+					}
+				}
+			}
+
 			foreach (RaycastResult rez in underCursor2)
 			{
 				if ( rez.gameObject.GetComponent<InventorySlot>() )
@@ -182,6 +205,10 @@ public class InventoryCursorInteract : MonoBehaviour
 					{
 
 						underSlot = rez.gameObject.GetComponent<InventorySlot>();
+
+						if ( underSlot.heldItem != null )
+							if (underSlot.itemAmount >= underSlot.heldItem.StackSize && underSlot.heldItem.StackAble)
+								return;
 
 						if (currentSlot.itemAmount > 0 && underSlot.heldItem == currentSlot.heldItem || underSlot.heldItem == null)
 						{

@@ -9,24 +9,51 @@ public class PlayerInteract : MonoBehaviour
 
 	#region Variables
 
-	
+	InventoryScript playerInventory;
 
 	#endregion
 
 	//  --------Active Functions-------------------------------------------------------------------------------
+
+	void Awake()
+	{
+		playerInventory = transform.parent.GetComponent<InventoryScript>();
+	}
 
 	void OnTriggerStay(Collider other)
 	{
 		
 		if ( other.GetComponent <ResourceScript> () && Input.GetMouseButtonDown (0) )
 		{
-			Debug.Log ( other.GetComponent<ResourceScript>().resourceName ) ;
+
+			ResourceScript rs = other.GetComponent<ResourceScript>();
+
+			rs.Gather(50);
+
+			playerInventory.AddItem(rs.resourceType, 50);
+			
 		}
+
+		if (CheckForDroppedItems(other))
+			return;
 
 	}
 
 	//  --------Sleeper Functions-------------------------------------------------------------------------------
 
+	bool CheckForDroppedItems(Collider other)
+	{
+		
+		if ( other.GetComponent<ItemDroppedScript>() )
+		{
 
+			if ( Input.GetButtonDown ( "Interact" ) )
+			{
+				playerInventory.AddItem(other.GetComponent<ItemDroppedScript>().heldItem, other.GetComponent<ItemDroppedScript>().PickUp());
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

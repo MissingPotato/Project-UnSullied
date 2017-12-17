@@ -5,22 +5,30 @@ using UnityEngine.UI;
 
 public class PlayerInventoryController : MonoBehaviour 
 {
+
+	//  --------Variables-------------------------------------------------------------------------------
+
 	#region Variables
 
 	public GameObject inventoryGameObject;
 	Vector2 inventoryPoz;
 	RectTransform inventoryTransform;
 	bool isHidden = false;
+
+
+
 	#endregion
 
+	//  --------Sleeper Functions-------------------------------------------------------------------------------
 
 	private void Awake()
 	{
 		inventoryTransform = inventoryGameObject.transform.GetComponent<RectTransform>();
 		inventoryPoz = inventoryTransform.position;
+		ToggleInventory();
 	}
 
-	void FixedUpdate () 
+	void LateUpdate () 
 	{
 
 		if (Input.GetButtonDown("InventoryToggle"))
@@ -32,6 +40,7 @@ public class PlayerInventoryController : MonoBehaviour
 
 	}
 
+	//  --------Sleeper Functions-------------------------------------------------------------------------------
 
 	void ToggleInventory()
 	{

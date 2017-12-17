@@ -9,14 +9,19 @@ public class PlayerController : MonoBehaviour
 
 	#region Variables
 	
-	public float playerBaseSpeed = 2.5f;
 	public PlayerStats playerStats;
 	private Rigidbody playerRb;
 	private Vector3 mousePos;
+	[SerializeField]
+	private bool isColiding;
 	Ray camRay;
 	RaycastHit floorHit;
 	Vector3 playerToMouse;
 	Quaternion newRotation;
+
+	private int layerMaskLook = ~(0 >> 8);
+
+	private float nextJump = 0;
 
 	[Space]
 	[Space]
@@ -42,7 +47,12 @@ public class PlayerController : MonoBehaviour
 		LookAtMouse();
 	}
 
-//  --------Sleeper Functions-------------------------------------------------------------------------------
+	private void OnCollisionEnter(Collision collision)
+	{
+		isColiding = true;
+	}
+
+	//  --------Sleeper Functions-------------------------------------------------------------------------------
 
 	/// <summary>
 	/// Generates a username out of the prefixes and the randomNames
@@ -58,14 +68,27 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public void PlayerMotor()
 	{
-		if ( Input.GetButton ("Sprint") )
+
+
+		if (Input.GetButton("Sprint"))
 		{
-			playerRb.velocity = new Vector3(Input.GetAxis("Horizontal") * playerBaseSpeed * 1.5f, playerRb.velocity.y , Input.GetAxis("Vertical") * playerBaseSpeed * 1.5f );
+			playerRb.MovePosition(new Vector3(transform.position.x + Input.GetAxis("Horizontal")* playerStats.walkSpeed * 1.2f * Time.fixedDeltaTime, transform.position.y, transform.position.z + (Input.GetAxis("Vertical")) * playerStats.walkSpeed * 1.2f * Time.fixedDeltaTime));
 		}
 		else
 		{
-			playerRb.velocity = new Vector3(Input.GetAxis("Horizontal") * playerBaseSpeed, playerRb.velocity.y , Input.GetAxis("Vertical") * playerBaseSpeed );	
+			playerRb.MovePosition(new Vector3(transform.position.x + Input.GetAxis("Horizontal") * playerStats.walkSpeed * Time.fixedDeltaTime, transform.position.y, transform.position.z + (Input.GetAxis("Vertical")) * playerStats.walkSpeed * Time.fixedDeltaTime));
 		}
+
+
+		if (Input.GetButtonDown("Jump") && isColiding && nextJump <= Time.timeSinceLevelLoad)
+		{
+			playerRb.velocity += new Vector3(playerRb.velocity.x * 0.3f, playerStats.jumpPower, playerRb.velocity.z * 0.3f);
+
+			nextJump = Time.timeSinceLevelLoad + .5f;
+
+			isColiding = false;
+		}
+
 	}
 
 	/// <summary>
@@ -73,29 +96,71 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public void LookAtMouse()
 	{
-		camRay = Camera.main.ScreenPointToRay ( Input.mousePosition ) ;
+		camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit[] hits = Physics.RaycastAll(camRay);
 
-		if ( Physics.Raycast ( camRay, out floorHit ))
+		foreach (RaycastHit hit in hits)
 		{
-
-			if (floorHit.collider.gameObject.name != "Plane")
-				return;
-
-			playerToMouse = floorHit.point - transform.position;
-			playerToMouse.y = 0;
-
-			newRotation = Quaternion.LookRotation(playerToMouse);
-			playerRb.MoveRotation ( newRotation ) ;
-
-		}
-
-		else
-		{
-			newRotation = Quaternion.Euler(Vector3.zero);
-			transform.rotation = transform.rotation;
-
+			if (hit.collider.gameObject.tag == "Ground")
+			{
+				playerToMouse = hit.point - transform.position;
+				playerToMouse.y = 0;
+				newRotation = Quaternion.LookRotation(playerToMouse);
+				playerRb.MoveRotation(newRotation);
+			}
 		}
 
 	}
 
 }
+
+
+
+/* Old scripts
+	public void PlayerMotor()
+	{
+		if ( Input.GetButton ("Sprint") )
+		{
+			playerRb.velocity = new Vector3(Input.GetAxis("Horizontal") * (playerStats.walkSpeed * 1.5f), playerRb.velocity.y , Input.GetAxis("Vertical") * (playerStats.walkSpeed * 1.5f) );
+		}
+		else
+		{
+			playerRb.velocity = new Vector3(Input.GetAxis("Horizontal") * playerStats.walkSpeed, playerRb.velocity.y , Input.GetAxis("Vertical") * playerStats.walkSpeed);	
+		}
+
+		if ( Input.GetButtonDown ("Jump") && isColiding && nextJump <= Time.timeSinceLevelLoad )
+		{
+			playerRb.velocity += new Vector3(playerRb.velocity.x * 0.3f, playerStats.jumpPower, playerRb.velocity.z * 0.3f);
+
+			nextJump = Time.timeSinceLevelLoad + .5f;
+
+			isColiding = false;
+		}
+
+	}
+
+	public void PlayerMotor2()
+	{
+
+		
+		if (Input.GetButton("Sprint"))
+		{
+			transform.position = new Vector3(transform.position.x + Input.GetAxis("Horizontal") * playerStats.walkSpeed * 1.2f * Time.fixedDeltaTime, transform.position.y, transform.position.z + (Input.GetAxis("Vertical")) * playerStats.walkSpeed * 1.2f * Time.fixedDeltaTime);
+		}
+		else
+		{
+			transform.position = new Vector3(transform.position.x + Input.GetAxis("Horizontal") * playerStats.walkSpeed * Time.fixedDeltaTime, transform.position.y, transform.position.z + (Input.GetAxis("Vertical")) * playerStats.walkSpeed * Time.fixedDeltaTime);
+		}
+
+
+		if (Input.GetButtonDown("Jump") && isColiding && nextJump <= Time.timeSinceLevelLoad)
+		{
+			playerRb.velocity += new Vector3(playerRb.velocity.x * 0.3f, playerStats.jumpPower, playerRb.velocity.z * 0.3f);
+
+			nextJump = Time.timeSinceLevelLoad + .5f;
+
+			isColiding = false;
+		}
+
+	}
+*/
