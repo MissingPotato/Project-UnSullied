@@ -99,10 +99,7 @@ public class InventoryCursorInteract : MonoBehaviour
 				{
 					if ( !rez.gameObject.GetComponent<InventorySlot>() )
 					{
-						if (currentSlot.DropItem())
-							Debug.Log("Succesfully dropped the item!");
-						else
-							Debug.LogWarning("Failed to drop the item!");
+						currentSlot.DropItem();
 					}
 				}
 			}

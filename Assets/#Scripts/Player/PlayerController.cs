@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
 	Vector3 playerToMouse;
 	Quaternion newRotation;
 
-	private int layerMaskLook = ~(0 >> 8);
 
 	private float nextJump = 0;
 
@@ -33,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
 	#endregion
 
-//  --------Active Functions-------------------------------------------------------------------------------
+	//  --------Active Functions-------------------------------------------------------------------------------
 
 	void Awake ()
 	{
@@ -41,10 +40,14 @@ public class PlayerController : MonoBehaviour
 		playerRb = GetComponent<Rigidbody>(); // Sets the player's rigidbody to playerRb
 	}
 	
-	void FixedUpdate () 
+	void Update () 
+	{
+		LookAtMouse();
+	}
+
+	private void FixedUpdate()
 	{
 		PlayerMotor();
-		LookAtMouse();
 	}
 
 	private void OnCollisionEnter(Collision collision)
