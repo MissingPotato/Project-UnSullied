@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
 	Vector3 playerToMouse;
 	Quaternion newRotation;
 
+	public Transform playerHand;
 
 	private float nextJump = 0;
 
@@ -38,6 +39,14 @@ public class PlayerController : MonoBehaviour
 	{
 		playerStats.playerName = GenerateUsername(); // Generate a name for the user.
 		playerRb = GetComponent<Rigidbody>(); // Sets the player's rigidbody to playerRb
+
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			if (transform.GetChild(i).tag == "Hand")
+			{
+				playerHand = transform.GetChild(i);
+			}
+		}
 	}
 	
 	void Update () 
