@@ -36,9 +36,15 @@ public class BuildingPlacementDebug : MonoBehaviour
 			placingBuilding.GetComponent<BuildingScript>().player = this.transform;
 		}
 
-		if ( Input.GetMouseButtonDown (0) )
+		if ( Input.GetMouseButtonDown (0) && placingBuilding != null )
 		{
 			placingBuilding.GetComponent<BuildingScript>().Place();
+			placingBuilding = null;
+		}
+
+		if ( Input.GetKeyDown(KeyCode.Escape) )
+		{
+			Destroy(placingBuilding);
 		}
 
 	}

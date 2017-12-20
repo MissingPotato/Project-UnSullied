@@ -64,6 +64,16 @@ public class PlayerController : MonoBehaviour
 		isColiding = true;
 	}
 
+
+
+	private void OnDrawGizmos()
+	{
+		if (playerHand != null)
+		{
+			Gizmos.DrawWireSphere(playerHand.position, 3f);
+		}
+	}
+
 	//  --------Sleeper Functions-------------------------------------------------------------------------------
 
 	/// <summary>
@@ -123,6 +133,8 @@ public class PlayerController : MonoBehaviour
 		}
 
 	}
+
+
 
 }
 

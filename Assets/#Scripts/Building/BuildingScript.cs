@@ -46,6 +46,8 @@ public class BuildingScript : MonoBehaviour
 
 	RaycastHit hitInfo;
 
+	Transform playerHand;
+
 	//  --------Active Functions-------------------------------------------------------------------------------
 
 	void Awake () 
@@ -65,22 +67,51 @@ public class BuildingScript : MonoBehaviour
 	
 	//  --------Sleeper Functions-------------------------------------------------------------------------------
 	
+	/// <summary>
+	/// Places the building
+	/// </summary>
 	public void Place()
 	{
 
 		Transform chekd = CheckForSnapping();
 
-		if ( chekd != null )
+		if ( chekd != null)
 		{
-			transform.parent = null;
-			transform.position = chekd.position;
-			transform.rotation = chekd.rotation;
-			isPlacing = false;
+
+			PivotScript pivotScript = chekd.GetComponent<PivotScript>();
+
+			if (buildingType == BuildingType.Wall && pivotScript.wallSocket == false )
+			{
+
+				transform.parent = null;
+				transform.position = chekd.position;
+				transform.rotation = chekd.rotation;
+
+				
+				pivotScript.wallSocket = true;
+				isPlacing = false;
+			}
+				
+			else if (buildingType == BuildingType.Foundation && pivotScript.platSocket == false )
+			{
+
+				transform.parent = null;
+				transform.position = chekd.position + chekd.forward * 2f;
+				transform.rotation = chekd.rotation;
+
+				SnapPoints[2].GetComponent<PivotScript>().platSocket = true;
+
+				pivotScript.platSocket = true;
+				isPlacing = false;
+			}
+				
+
+			
 		}
 		else
 		{
 
-			if ( Physics.Raycast(transform.position, -transform.up * 3 , out hitInfo) )
+			if (Physics.Raycast(transform.position, -transform.up * 3, out hitInfo) && buildingType == BuildingType.Foundation )
 			{
 				transform.parent = null;
 				transform.position = new Vector3( transform.position.x , hitInfo.point.y , transform.position.z );
@@ -90,6 +121,9 @@ public class BuildingScript : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Updates the building's position, includes snapping
+	/// </summary>
 	public void UpdatePosition()
 	{
 
@@ -102,24 +136,36 @@ public class BuildingScript : MonoBehaviour
 		}
 		else if (chekd != null )
 		{
-			transform.position = chekd.position;
+
+			if (buildingType == BuildingType.Foundation)
+				transform.position = chekd.position + chekd.forward * 2f;
+			else
+				transform.position = chekd.position;
+
 			transform.rotation = chekd.rotation;
 			Debug.DrawLine(player.position, transform.position, Color.red, 0, false);
 		}
 		
 	}
 
+	/// <summary>
+	/// Checks for the closest snapping point
+	/// </summary>
+	/// <returns>Closest snapping point</returns>
 	public Transform CheckForSnapping()
 	{
 		closestSnapPoint = null;
 		nearbyBuildings.Clear();
 		closestBuilding = null;
 
-		// Check for nearby colliders.
-		Collider[] nearbyColliders = Physics.OverlapSphere( player.GetComponent<PlayerController>().playerHand.position , buildingDistance );
+		playerHand = player.GetComponent<PlayerController>().playerHand;
 
+		if (playerHand == null)
+			return null;
 		
-		
+		// Check for nearby colliders.
+		Collider[] nearbyColliders = Physics.OverlapSphere(playerHand.position , buildingDistance );
+
 		// Scan for the buildings
 		foreach (Collider hit in nearbyColliders)
 		{
@@ -146,12 +192,15 @@ public class BuildingScript : MonoBehaviour
 		
 		float closestDistance = 500f;
 
+		
+
 		// Check for the closest building
 		foreach (var building in nearbyBuildings)
 		{
-			if ( Vector3.Distance (player.GetComponent<PlayerController>().playerHand.position, building.transform.position ) < closestDistance && building != this)
+			if ( Vector3.Distance (playerHand.position, building.transform.position ) < closestDistance && building != this)
 			{
 				closestBuilding = building;
+				closestDistance = Vector3.Distance(playerHand.position, building.transform.position);
 			}
 		}
 
@@ -170,7 +219,7 @@ public class BuildingScript : MonoBehaviour
 			{
 				if (point.GetComponent<PivotScript>().platSocket == false)
 				{
-					if (Vector3.Distance(player.GetComponent<PlayerController>().playerHand.position, point.position) < closestDistance)
+					if (Vector3.Distance(playerHand.position, point.position) < closestDistance)
 					{
 						closestDistance = Vector3.Distance(player.GetComponent<PlayerController>().playerHand.position, point.position);
 						closestSnapPoint = point;
@@ -204,6 +253,9 @@ public class BuildingScript : MonoBehaviour
 			return null;
 	}
 
+	/// <summary>
+	/// Initializes the script
+	/// </summary>
 	void Initialize()
 	{
 
@@ -220,9 +272,10 @@ public class BuildingScript : MonoBehaviour
 			}
 		}
 
+		
+
 	}
-	
-	
+
 
 }
 
