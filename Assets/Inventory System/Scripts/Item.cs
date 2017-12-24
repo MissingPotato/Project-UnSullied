@@ -14,6 +14,8 @@ public class Item : ScriptableObject
 
 	public GameObject itemObject;
 
+	public GameObject buildObject;
+
 	[TextArea]
 	public string Description;
 
@@ -29,11 +31,13 @@ public class Item : ScriptableObject
 
 	[Header("Type of item")]
 	[Tooltip("Includes swords, potions, anything you can hold in your hand.")]
-	public bool Wearable;
+	public bool wearable;
 	[Tooltip("This defines any kind of usable item, food, potions, etc..")]
 	public bool useable;
 	[Tooltip("This is any kind of special item, includes all the quest items")]
-	public bool SpecialItem;
+	public bool specialItem;
+	[Tooltip("If it is a placeable object in the world!")]
+	public bool placeableObject;
 }
 
 
